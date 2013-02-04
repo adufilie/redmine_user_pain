@@ -16,10 +16,13 @@ module RedmineUserPain
         score = 0;
         self.custom_values.each do |field|
           begin
-            score += field.value[0] - '0'[0] # assumes value is a string that starts with a single digit
-            #score += field['possible_values'].index(field.value)
-          rescue
-            # ignore error
+            if field.value.is_a? String and field.value.length > 0 then
+              # assumes value is a string that starts with a single digit between 1 and 9
+              score += field.value[0] - '0'[0] - 1
+              #score += field['possible_values'].index(field.value)
+            end
+          rescue Exception => e
+            return e.message
           end
         end
         return score
